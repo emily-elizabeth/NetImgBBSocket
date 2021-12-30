@@ -1,6 +1,18 @@
 #tag Class
 Protected Class NetImgBBSocket
 Inherits URLConnection
+	#tag Event
+		Sub ContentReceived(URL As String, HTTPStatus As Integer, content As String)
+		  if (HTTPStatus = 200) then // everything is good
+		    DIM result As NEW NetImgBBResults(NEW JSONItem(content))
+		    RaiseEvent ImageResultsReceived result
+		    
+		  else // some kind of error
+		  end if
+		End Sub
+	#tag EndEvent
+
+
 	#tag Method, Flags = &h21
 		Private Function MIMEType(fTarget as FolderItem) As String
 		  var arsParts() as String = fTarget.Name.Split("")
@@ -77,6 +89,11 @@ Inherits URLConnection
 		  
 		End Sub
 	#tag EndMethod
+
+
+	#tag Hook, Flags = &h0
+		Event ImageResultsReceived(results As NetImgBBResults)
+	#tag EndHook
 
 
 	#tag Property, Flags = &h0
